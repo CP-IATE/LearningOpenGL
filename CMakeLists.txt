@@ -3,7 +3,13 @@ project(TestingOpenGL)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(TestingOpenGL main.cpp glad.c)
+add_executable(TestingOpenGL main.cpp glad.c#)
+        window.cpp
+        window.h
+        Figure.cpp
+        Figure.h
+        Shader.cpp
+        Shader.h)
 
 add_library(GLFW STATIC IMPORTED)
 add_library(OpenGL STATIC IMPORTED)
