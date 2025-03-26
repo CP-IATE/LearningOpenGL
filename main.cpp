@@ -1,4 +1,5 @@
 #include "Window.h"
+#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
 
 int main() {
     float vertices[] = {
