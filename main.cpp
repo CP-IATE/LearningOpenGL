@@ -2,10 +2,10 @@
 
 int main() {
     float vertices[] = {
-        0.5f,  0.5f, 0.0f,
+        0.5f, 0.5f, 0.0f,
         0.5f, -0.5f, 0.0f,
-       -0.5f, -0.5f, 0.0f,
-       -0.5f,  0.5f, 0.0f,
+        -0.5f, -0.5f, 0.0f,
+        -0.5f, 0.5f, 0.0f,
         -0.6f, 0.8f, 0.0f
     };
     unsigned int indices[] = {
@@ -15,7 +15,8 @@ int main() {
 
     auto window = Window(800, 600, "Hello");
 
-    auto figure_to_draw = Figure(vertices, indices, sizeof(vertices), sizeof(indices));
+    auto figure_to_draw = Figure(vertices, indices, sizeof(vertices), sizeof(indices), "shaders/frag.glsl",
+                                 "shaders/vert.glsl");
     window.set_figure(&figure_to_draw);
 
     window.run();

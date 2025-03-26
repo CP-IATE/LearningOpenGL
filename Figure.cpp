@@ -4,7 +4,8 @@
 
 #include "Figure.h"
 
-Figure::Figure(float* vertices, unsigned int* indices, size_t vertices_count, size_t indices_count) {
+Figure::Figure(float *vertices, unsigned int *indices, size_t vertices_count, size_t indices_count,
+               const char *frag_shader_file, const char *vert_shader_file): shader(frag_shader_file, vert_shader_file) {
     this->vertices = vertices;
     this->indices = indices;
     this->vertices_count = vertices_count;
@@ -24,20 +25,18 @@ void Figure::prepare_draw(unsigned int &VAO, unsigned int &VBO, unsigned int &EB
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->indices_count, this->indices, GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *) 0);
     glEnableVertexAttribArray(0);
 }
 
-void Figure::draw(unsigned int& VAO) {
-
+void Figure::draw(unsigned int &VAO) {
     glUseProgram(this->shader.get_shader_program());
     glBindVertexArray(VAO);
 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
 }
 
-void Figure::set_shader(Shader& shader) {
+void Figure::set_shader(Shader &shader) {
     this->shader = shader;
 }
 
