@@ -3,14 +3,11 @@
 //
 
 #include "Shader.h"
+#include <fstream>
+#include <sstream>
 
-void Shader::create_fragment_shader(unsigned int fragment_shader) {
-    const char *fragment_shader_source = "#version 330 core\n"
-    "out vec4 FragColor;\n"
-    "void main()\n"
-    "{\n"
-    "FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-    "}\0";
+void Shader::create_fragment_shader(unsigned int fragment_shader, const char *frag_shader_file) {
+    const char *fragment_shader_source = read_shader(frag_shader_file).c_str();
 
     glShaderSource(fragment_shader, 1, &fragment_shader_source, NULL);
     glCompileShader(fragment_shader);
@@ -18,13 +15,8 @@ void Shader::create_fragment_shader(unsigned int fragment_shader) {
     check_shader_compilation(fragment_shader, "FRAGMENT");
 }
 
-void Shader::create_vertex_shader(unsigned int vertex_shader) {
-    const char *vertex_shader_source = "#version 330 core\n"
-    "layout (location = 0) in vec3 aPos;\n"
-    "void main()\n"
-    "{\n"
-    "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-    "}\0";
+void Shader::create_vertex_shader(unsigned int vertex_shader, const char *vert_shader_file) {
+    const char *vertex_shader_source = read_shader(vert_shader_file).c_str();
 
     glShaderSource(vertex_shader, 1, &vertex_shader_source, NULL);
     glCompileShader(vertex_shader);
@@ -32,34 +24,48 @@ void Shader::create_vertex_shader(unsigned int vertex_shader) {
     check_shader_compilation(vertex_shader, "VERTEX");
 }
 
-void Shader::check_shader_compilation(unsigned int shader, const char* type) {
-    int  success;
+void Shader::check_shader_compilation(unsigned int shader, const char *type) {
+    int success;
     char info_log[512];
     glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-
-    if(!success)
-    {
+    if (!success) {
         glGetShaderInfoLog(shader, 512, NULL, info_log);
-        std::cout << "ERROR::SHADER::" << type <<"::COMPILATION_FAILED\n" << info_log << std::endl;
+        std::cout << "ERROR::SHADER::" << type << "::COMPILATION_FAILED\n" << info_log << std::endl;
     }
 }
 
 void Shader::check_linking_integrity() {
-    int  success;
+    int success;
     char infoLog[512];
     glGetProgramiv(this->shader_program, GL_LINK_STATUS, &success);
-    if(!success) {
+    if (!success) {
         glGetProgramInfoLog(this->shader_program, 512, NULL, infoLog);
         std::cout << "ERROR::SHADER::PROGRAM::COMPILATION_FAILED\n" << infoLog << std::endl;
     }
 }
 
-Shader::Shader() {
+std::string Shader::read_shader(const char *filename) {
+    std::ifstream file(filename);
+
+    if (!file) {
+        std::cerr << "ERROR::SHADER::READ\n" << "Unable to open and read file: " << filename << std::endl;
+        return "";
+    }
+
+    std::stringstream content;
+
+    content << file.rdbuf();
+
+    file.close();
+    return content.str();
+}
+
+Shader::Shader(const char *frag_shader_file, const char *vert_shader_file) {
     unsigned int vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-    create_vertex_shader(vertex_shader);
+    create_vertex_shader(vertex_shader, vert_shader_file);
 
     unsigned int fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-    create_fragment_shader(fragment_shader);
+    create_fragment_shader(fragment_shader, frag_shader_file);
 
     this->shader_program = glCreateProgram();
     glAttachShader(this->shader_program, vertex_shader);
