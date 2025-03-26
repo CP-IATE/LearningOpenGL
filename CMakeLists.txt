@@ -3,13 +3,14 @@ project(TestingOpenGL)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(TestingOpenGL main.cpp glad.c#)
+add_executable(TestingOpenGL main.cpp glad.c
         window.cpp
         window.h
         Figure.cpp
         Figure.h
         Shader.cpp
-        Shader.h)
+        Shader.h
+)
 
 add_library(GLFW STATIC IMPORTED)
 add_library(OpenGL STATIC IMPORTED)
@@ -24,3 +25,12 @@ set_target_properties(OpenGL PROPERTIES
 
 target_link_libraries(TestingOpenGL PRIVATE GLFW)
 target_include_directories(TestingOpenGL PRIVATE "D:/LibsForOpenGL/Include")
+
+add_custom_target(copy_resources ALL
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/shaders/
+        $<TARGET_FILE_DIR:TestingOpenGL>/shaders
+        COMMENT "Copying shaders"
+)
+
+add_dependencies(TestingOpenGL copy_resources)
