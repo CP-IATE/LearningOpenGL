@@ -11,10 +11,10 @@ Instalation guidlines can be found [here](https://learnopengl.com/Getting-starte
 Prefered lib file structure
 ```
 lirary:
-  .lib file
-  include:
-    GLFW:
-      ...
+| .lib file
+| include:
+| | GLFW:
+| | | ...
 ```
 After instalation change locations in CMakeList.txt file to locations, where you stored GLFW.
 ```
