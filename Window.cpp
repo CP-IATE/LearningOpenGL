@@ -4,7 +4,7 @@
 
 #include "Window.h"
 
-Window::Window(int width, int height, const char* title) {
+Window::Window(int width, int height, const char *title) {
     init_window(width, height, title);
     move_context();
     set_viewport(0, 0, width, height);
@@ -29,7 +29,7 @@ void Window::init_window(int width, int height, const char *title) {
 void Window::move_context() {
     glfwMakeContextCurrent(this->window);
 
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+    if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
         std::cout << "Failed to initialize GLAD" << std::endl;
         exit(-1);
     }
@@ -41,7 +41,7 @@ int Window::run() {
         this->figure->prepare_draw(VAO, VBO, EBO);
     }
 
-    while(!glfwWindowShouldClose(this->window)) {
+    while (!glfwWindowShouldClose(this->window)) {
         processInput(this->window);
 
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -56,7 +56,7 @@ int Window::run() {
     }
 
     glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(2, VBO);
     glDeleteBuffers(1, &EBO);
     if (this->figure != nullptr) this->figure->delete_shader();
     glfwTerminate();
@@ -67,16 +67,15 @@ void Window::set_viewport(int x, int y, int width, int height) {
     glViewport(x, y, width, height);
 }
 
-void Window::set_figure(Figure* figure_to_draw) {
+void Window::set_figure(Figure *figure_to_draw) {
     this->figure = figure_to_draw;
 }
 
-void Window::framebufferSizeCallback(GLFWwindow* window, int width, int height)
-{
+void Window::framebufferSizeCallback(GLFWwindow *window, int width, int height) {
     glViewport(0, 0, width, height);
 }
 
-void Window::processInput(GLFWwindow* window) {
+void Window::processInput(GLFWwindow *window) {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
     }

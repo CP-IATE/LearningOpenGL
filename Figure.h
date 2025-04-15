@@ -11,16 +11,18 @@ class Figure {
 private:
     float *vertices;
     unsigned int *indices;
+    float *colors;
 
-    size_t indices_count, vertices_count;
+    size_t indices_count, vertices_count, colors_count;
 
     Shader shader;
 
 public:
-    Figure(float *vertices, unsigned int *indices, size_t vertices_count, size_t indices_count,
+    Figure(float *vertices, unsigned int *indices, float *colors,
+           size_t vertices_count, size_t indices_count, size_t colors_count,
            const char *frag_shader_file, const char *vert_shader_file);
 
-    void prepare_draw(unsigned int &VAO, unsigned int &VBO, unsigned int &EBO);
+    void prepare_draw(unsigned int &VAO, unsigned int *VBO, unsigned int &EBO);
 
     void draw(unsigned int &VAO);
 

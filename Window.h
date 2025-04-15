@@ -9,23 +9,29 @@
 
 class Window {
 private:
-    unsigned int VBO, VAO, EBO;
-    GLFWwindow* window;
-    Figure* figure = nullptr;
+    unsigned int VAO, EBO;
+    unsigned int VBO[2] = {NULL, NULL};
+    GLFWwindow *window;
+    Figure *figure = nullptr;
 
 private:
-    void init_window(int width, int height, const char* title);
+    void init_window(int width, int height, const char *title);
+
     void move_context();
-    static void framebufferSizeCallback(GLFWwindow* window, int width, int height);
-    static void processInput(GLFWwindow* window);
+
+    static void framebufferSizeCallback(GLFWwindow *window, int width, int height);
+
+    static void processInput(GLFWwindow *window);
 
 public:
-    Window(int width, int height, const char* title);
-    int run();
-    void set_viewport(int x, int y, int width, int height);
-    void set_figure(Figure* figure_to_draw);
-};
+    Window(int width, int height, const char *title);
 
+    int run();
+
+    void set_viewport(int x, int y, int width, int height);
+
+    void set_figure(Figure *figure_to_draw);
+};
 
 
 #endif //WINDOW_H
