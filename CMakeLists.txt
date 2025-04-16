@@ -10,6 +10,10 @@ add_executable(TestingOpenGL main.cpp glad.c
         Figure.h
         Shader.cpp
         Shader.h
+        stb_image.h
+        stb_image.cpp
+        Texture.cpp
+        Texture.h
 )
 
 add_library(GLFW STATIC IMPORTED)
@@ -31,6 +35,10 @@ add_custom_target(copy_resources ALL
         ${CMAKE_SOURCE_DIR}/shaders/
         $<TARGET_FILE_DIR:TestingOpenGL>/shaders
         COMMENT "Copying shaders"
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/textures/
+        $<TARGET_FILE_DIR:TestingOpenGL>/textures
+        COMMENT "Copying textures"
 )
 
 add_dependencies(TestingOpenGL copy_resources)

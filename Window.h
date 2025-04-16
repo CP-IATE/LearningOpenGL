@@ -10,7 +10,7 @@
 class Window {
 private:
     unsigned int VAO, EBO;
-    unsigned int VBO[2] = {NULL, NULL};
+    unsigned int VBO[3];
     GLFWwindow *window;
     Figure *figure = nullptr;
 
