@@ -4,10 +4,11 @@
 
 #include "Window.h"
 
-Window::Window(int width, int height, const char *title) {
+Window::Window(int width, int height, const char *title, bool linemode) {
     init_window(width, height, title);
     move_context();
     set_viewport(0, 0, width, height);
+    this->linemode = linemode;
 }
 
 void Window::init_window(int width, int height, const char *title) {
@@ -40,11 +41,14 @@ int Window::run() {
     if (this->figure != nullptr) {
         this->figure->prepare_draw(VAO, VBO, EBO);
     }
-
+    if (this->linemode) {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    }
+    glLineWidth(3.0f);
     while (!glfwWindowShouldClose(this->window)) {
         processInput(this->window);
 
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         if (this->figure != nullptr) {

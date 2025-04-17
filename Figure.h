@@ -20,6 +20,9 @@ private:
 
     Texture texture;
 
+private:
+    void rotate();
+
 public:
     Figure(float *vertices, unsigned int *indices, float *colors, float *texture_coords,
            size_t vertices_count, size_t indices_count, size_t colors_count, size_t texture_count,

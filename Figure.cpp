@@ -3,6 +3,9 @@
 //
 
 #include "Figure.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 Figure::Figure(float *vertices, unsigned int *indices, float *colors, float *texture_coords,
                size_t vertices_count, size_t indices_count, size_t colors_count, size_t texture_count,
@@ -45,14 +48,14 @@ void Figure::prepare_draw(unsigned int &VAO, unsigned int *VBO, unsigned int &EB
 }
 
 void Figure::draw(unsigned int &VAO) {
-    // float timeValue = glfwGetTime();
-    // float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
-    // int vertexColorLocation = glGetUniformLocation(this->shader.get_shader_program(), "myColor");
     glUseProgram(this->shader.get_shader_program());
-    // glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
-    this->texture.use();
+
+    // this->texture.use();
+
+    this->rotate();
+
     glBindVertexArray(VAO);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_LINES, this->indices_count, GL_UNSIGNED_INT, 0);
 }
 
 void Figure::set_shader(Shader &shader) {
@@ -61,4 +64,29 @@ void Figure::set_shader(Shader &shader) {
 
 void Figure::delete_shader() {
     glDeleteProgram(this->shader.get_shader_program());
+}
+
+void Figure::rotate() {
+    glm::mat4 model = glm::mat4(1.0f);
+    glm::mat4 view = glm::mat4(1.0f);
+    glm::mat4 projection = glm::mat4(1.0f);
+
+    model = glm::rotate(model, glm::radians(-4.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    view = glm::lookAt(glm::vec3(0.5f, 0.5f, 1.5f),
+                       glm::vec3(0.0f, 0.1f, 0.0f),
+                       glm::vec3(0.0f, 1.0f, 0.0f));
+    projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+
+
+    int modelLoc = glGetUniformLocation(this->shader.get_shader_program(), "model");
+    int viewLoc = glGetUniformLocation(this->shader.get_shader_program(), "view");
+    int projectionLoc = glGetUniformLocation(this->shader.get_shader_program(), "projection");
+
+    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+    glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+    glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+}
+
+void Figure::set_texture(Texture &texture) {
+    this->texture = texture;
 }

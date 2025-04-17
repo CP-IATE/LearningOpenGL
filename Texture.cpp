@@ -9,6 +9,9 @@
 #include "stb_image.h"
 
 Texture::Texture(const char *texture_file) {
+    if (!texture_file) {
+        return;
+    }
     glGenTextures(1, &this->texture);
     glBindTexture(GL_TEXTURE_2D, this->texture);
 

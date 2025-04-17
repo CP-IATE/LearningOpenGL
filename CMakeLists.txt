@@ -42,3 +42,6 @@ add_custom_target(copy_resources ALL
 )
 
 add_dependencies(TestingOpenGL copy_resources)
+
+find_package(glm CONFIG REQUIRED)
+target_link_libraries(TestingOpenGL PRIVATE glm::glm)

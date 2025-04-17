@@ -13,6 +13,7 @@ private:
     unsigned int VBO[3];
     GLFWwindow *window;
     Figure *figure = nullptr;
+    bool linemode = false;
 
 private:
     void init_window(int width, int height, const char *title);
@@ -24,7 +25,7 @@ private:
     static void processInput(GLFWwindow *window);
 
 public:
-    Window(int width, int height, const char *title);
+    Window(int width, int height, const char *title, bool linemode = false);
 
     int run();
 
