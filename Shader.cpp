@@ -7,7 +7,8 @@
 #include <sstream>
 
 void Shader::create_fragment_shader(unsigned int fragment_shader, const char *frag_shader_file) {
-    const char *fragment_shader_source = read_shader(frag_shader_file).c_str();
+    std::string fragment_shader_source_str = read_shader(frag_shader_file);
+    const char *fragment_shader_source = fragment_shader_source_str.c_str();
 
     glShaderSource(fragment_shader, 1, &fragment_shader_source, NULL);
     glCompileShader(fragment_shader);
@@ -16,7 +17,8 @@ void Shader::create_fragment_shader(unsigned int fragment_shader, const char *fr
 }
 
 void Shader::create_vertex_shader(unsigned int vertex_shader, const char *vert_shader_file) {
-    const char *vertex_shader_source = read_shader(vert_shader_file).c_str();
+    std::string vertex_shader_source_str = read_shader(vert_shader_file);
+    const char *vertex_shader_source = vertex_shader_source_str.c_str();
 
     glShaderSource(vertex_shader, 1, &vertex_shader_source, NULL);
     glCompileShader(vertex_shader);
@@ -55,7 +57,6 @@ std::string Shader::read_shader(const char *filename) {
     std::stringstream content;
 
     content << file.rdbuf();
-
     file.close();
     return content.str();
 }
