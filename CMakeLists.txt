@@ -3,7 +3,18 @@ project(TestingOpenGL)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(TestingOpenGL main.cpp glad.c)
+add_executable(TestingOpenGL main.cpp glad.c
+        window.cpp
+        window.h
+        Figure.cpp
+        Figure.h
+        Shader.cpp
+        Shader.h
+        stb_image.h
+        stb_image.cpp
+        Texture.cpp
+        Texture.h
+)
 
 add_library(GLFW STATIC IMPORTED)
 add_library(OpenGL STATIC IMPORTED)
@@ -18,3 +29,19 @@ set_target_properties(OpenGL PROPERTIES
 
 target_link_libraries(TestingOpenGL PRIVATE GLFW)
 target_include_directories(TestingOpenGL PRIVATE "D:/LibsForOpenGL/Include")
+
+add_custom_target(copy_resources ALL
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/shaders/
+        $<TARGET_FILE_DIR:TestingOpenGL>/shaders
+        COMMENT "Copying shaders"
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/textures/
+        $<TARGET_FILE_DIR:TestingOpenGL>/textures
+        COMMENT "Copying textures"
+)
+
+add_dependencies(TestingOpenGL copy_resources)
+
+find_package(glm CONFIG REQUIRED)
+target_link_libraries(TestingOpenGL PRIVATE glm::glm)
